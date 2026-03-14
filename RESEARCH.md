@@ -1,24 +1,50 @@
-## Puzzle source repositories
+## Source coverage
 
-| # | Source | URL | Focus |
-|---|--------|-----|-------|
-| 1 | Nikoli | https://www.nikoli.co.jp/en/ | Logic puzzles (Sudoku, Slitherlink, Nurikabe) |
-| 2 | Simon Tatham's Puzzles | https://www.chiark.greenend.org.uk/~sgtatham/puzzles/ | Open-source single-player logic games |
-| 3 | Puzzle Portal (Wei-Hwa Huang) | https://puzzles.mit.edu/ | MIT Mystery Hunt archives |
-| 4 | Grandmaster Puzzles | https://www.gmpuzzles.com/ | Hand-crafted logic puzzles by Thomas Snyder |
-| 5 | Puzzle Baron | https://www.puzzlebaron.com/ | Logic grids, cryptograms, acrostics |
-| 6 | Erich Friedman's Puzzle Palace | https://erich-friedman.github.io/puzzle/ | Mathematical and combinatorial puzzles |
-| 7 | Project Euler | https://projecteuler.net/ | Computational math puzzles |
-| 8 | Lichess Puzzles | https://lichess.org/training | Chess tactics database (open-source) |
-| 9 | Puzzle Games on itch.io | https://itch.io/games/tag-puzzle | Indie puzzle game prototypes |
-| 10 | GCHQ Puzzle Book Resources | https://www.gchq.gov.uk/section/news/puzzle | Cryptographic and logic puzzles |
-| 11 | Janko.at | https://www.janko.at/Raetsel/ | Extensive logic puzzle archive |
-| 12 | Conceptis Puzzles | https://www.conceptispuzzles.com/ | Picture logic and number puzzles |
-| 13 | Kakuro.com | https://www.kakuro.com/ | Cross-sum number puzzles |
-| 14 | Logic Masters Deutschland | https://logic-masters.de/ | Puzzle competitions and archives |
-| 15 | Puzzling Stack Exchange | https://puzzling.stackexchange.com/ | Community-curated puzzles and solutions |
-| 16 | World Puzzle Federation | https://worldpuzzle.org/ | International competition puzzles |
-| 17 | KenKen Puzzles | https://www.kenkenpuzzle.com/ | Arithmetic-constraint grid puzzles |
-| 18 | Brilliant.org | https://brilliant.org/ | Math, logic, and CS puzzles |
-| 19 | Puzzle Museum (Rob's Puzzle Page) | https://robspuzzlepage.com/ | Mechanical and physical puzzle taxonomy |
-| 20 | BoardGameGeek Puzzle Category | https://boardgamegeek.com/boardgamecategory/1028/puzzle | Puzzle board game database and reviews |
+This repository now keeps the restored `src/puzzles.json` as the base dataset and layers
+additional entries from the 10 researched source collections on top of it.
+
+- Base dataset before this pass: `1000` entries.
+- Added in this pass from the 10 documented collections: `90` entries.
+- Dataset after this pass: `1090` entries.
+
+Research was performed on 2026-03-14. The Chrome DevTools MCP browser was attempted first
+for the source crawl, but several public sites repeatedly timed out or blocked scripted page
+loads, so some URL/title verification was completed with fallback page fetches instead.
+
+## The 10 documented collections
+
+| Source | Directory browsed | Entries added in this pass | Coverage examples now present in `src/puzzles.json` |
+|---|---|---:|---|
+| Project Euler Archives | https://projecteuler.net/archives | 10 | Modular Inverses, Lattice Quadrilaterals, Flipping Game |
+| Simon Tatham Puzzle Collection | https://www.chiark.greenend.org.uk/~sgtatham/puzzles/ | 10 | Black Box, Galaxies, Loopy, Undead |
+| GM Puzzles Categories | https://www.gmpuzzles.com/blog/category/puzzles/ | 10 | Arrow Sudoku, Killer Sudoku, Star Battle, LITS |
+| Conceptis Puzzle Portal | https://www.conceptispuzzles.com/index.aspx?uri=puzzle | 10 | Pic-a-Pix Nonogram, Sym-a-Pix, Kakuro, Hitori |
+| Nikoli Puzzle Directory | https://www.nikoli.co.jp/en/puzzles/ | 10 | Shikaku, Heyawake, Hashiwokakero, Yajilin |
+| Janko Puzzle Archive | https://www.janko.at/Raetsel/ | 10 | Balance-Loop, Galaxien, Slitherlink, Kakuro |
+| Puzzle Baron Collections | https://www.puzzlebaron.com/ | 10 | Acrostics, Cryptograms, Logic Puzzles, Word Searches |
+| MIT Mystery Hunt / Puzzle Club | https://puzzles.mit.edu/ | 6 | 15 Questions, The Greatest Jigsaw, The Killer |
+| Logic Masters Deutschland Portal | https://logic-masters.de/Raetselportal/ | 9 | Out of the Loop, Slitherlink Yin Yang, Interphase |
+| World Puzzle Federation Puzzle Types | https://worldpuzzle.org/types-of-puzzles | 5 | Clouds, Easy As, Masyu, Tents |
+
+## Normalization notes
+
+- Existing entries were preserved. No restored base entries were removed.
+- Added entries use the existing schema exactly: `id`, `name`, `category`, `subCategory`,
+  `sourceName`, `sourceUrl`, ratings, `materials`, and `notes`.
+- Deduplication for this pass used unique `id` plus normalized `sourceName + name`.
+- Some broad puzzle families appear more than once across different sources on purpose
+  when the collection itself is materially distinct, for example `Masyu` in Nikoli, GM
+  Puzzles, Janko, and WPF.
+- `avgMinutes`, skill ratings, and `materials` remain editorial normalization values so
+  unlike-for-like collections can still be filtered together in the app.
+- `sourceUrl` was kept as specific as practical: direct puzzle pages where available, and
+  category/archive pages when the source is organized as a subtype collection rather than a
+  single canonical puzzle page.
+
+## Caveats
+
+- MIT Mystery Hunt indexing was easiest to verify through the public hunt index mirror, so
+  those entries currently point there rather than directly to every hunt host.
+- Logic Masters Deutschland and some source portals expose a mix of category indexes and
+  individual puzzle pages; the dataset reflects that mixed structure instead of forcing all
+  entries into one URL pattern.

@@ -45,6 +45,8 @@ const profileDefs = [
 
 type Profile = (typeof profileDefs)[number]['key'];
 type TimeKey = (typeof timeBuckets)[number]['key'];
+const sortOptions = ['fit', 'fun', 'time', 'difficulty'] as const;
+type SortKey = (typeof sortOptions)[number];
 
 function fitScore(p: Puzzle) {
   return Math.round((p.fun * 0.45 + p.logic * 0.2 + p.spatial * 0.1 + p.word * 0.1 + p.social * 0.05 + (10 - p.difficulty) * 0.1) * 10) / 10;
@@ -56,7 +58,7 @@ export default function App() {
   const [activeMaterials, setActiveMaterials] = useState<Material[]>([]);
   const [timeKey, setTimeKey] = useState<TimeKey>('all');
   const [profile, setProfile] = useState<Profile>('all');
-  const [sort, setSort] = useState<'fit' | 'fun' | 'time' | 'difficulty'>('fit');
+  const [sort, setSort] = useState<SortKey>('fit');
 
   const categories = useMemo(() => Array.from(new Set(puzzles.map((p) => p.category))).sort(), []);
   const materials: Material[] = ['none', 'paper', 'board', 'props', 'digital'];
@@ -148,8 +150,8 @@ export default function App() {
       <section className="filter-block">
         <h4>Sort</h4>
         <div className="chips">
-          {['fit', 'fun', 'time', 'difficulty'].map((s) => (
-            <button key={s} className={sort === s ? 'chip active' : 'chip'} onClick={() => setSort(s as any)}>{s}</button>
+          {sortOptions.map((s) => (
+            <button key={s} className={sort === s ? 'chip active' : 'chip'} onClick={() => setSort(s)}>{s}</button>
           ))}
         </div>
       </section>
